@@ -1,11 +1,6 @@
 import { txt } from './io/p1_input'
 import { Problem } from '../lib/problem'
 
-interface Solution {
-	p1: string,
-	p2: string
-}
-
 export class Problem01 extends Problem {
 
 	getInput() {
