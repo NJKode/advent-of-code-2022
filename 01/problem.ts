@@ -1,13 +1,14 @@
-import { txt } from './io/p1_input';
+import { txt } from './io/p1_input'
+import { Problem } from '../lib/problem'
 
-export class Runner {
-	constructor() {
-		
-	}
+interface Solution {
+	p1: string,
+	p2: string
+}
+
+export class Problem01 extends Problem {
 
 	getInput() {
-		let nice;
-		console.log(nice);
 		return txt;
 	}
 
@@ -32,9 +33,11 @@ export class Runner {
 
 		});
 
-		console.log(maxCalories);
-		const finalScore = maxCalories.reduce((sum: number, cal: number) => sum += cal, 0)
-		console.log(finalScore);
-		return finalScore;
+		const p2Solution = maxCalories.reduce((sum: number, cal: number) => sum += cal, 0).toString()
+		const solution = {
+			p1: maxCalories[0].toString(),
+			p2: p2Solution
+		}
+		return solution;
 	}
 }
