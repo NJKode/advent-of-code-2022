@@ -76,13 +76,66 @@ export class Problem08 extends Problem {
 		const width: number = forrest[0].length;
 		const height: number = forrest.length;
 
-		let numberVisibleTrees = (height * 2) + (width * 2) - 4;
+		let maxViewScore = 0;
+
+		for (let y: number = 1; y < height - 1; y += 1){
+			for (let x: number = 1; x < width - 1; x += 1){
+				const tree: string = forrest[y][x]
+
+				let viewDown = 0;
+				let viewUp = 0;
+				let viewLeft = 0;
+				let viewRight = 0;
+
+				let lookLeft = x - 1;
+				let visibleLeft = true;
+				while (visibleLeft && lookLeft >= 0) {
+					const lookTree = forrest[y][lookLeft];
+					visibleLeft = lookTree < tree;
+					lookLeft -= 1;
+					viewLeft += 1;
+				}
+
+				let lookRight: number = x + 1;
+				let visibleRight = true;
+				while (visibleRight && lookRight < width) {
+					const lookTree = forrest[y][lookRight];
+					visibleRight = lookTree < tree;
+					lookRight += 1;
+					viewRight += 1;
+				}
+
+				let lookUp: number = y - 1;
+				let visibleUp = true;
+				while (visibleUp && lookUp >= 0) {
+					const lookTree = forrest[lookUp][x];
+					visibleUp = lookTree < tree;
+					lookUp -= 1;
+					viewUp += 1
+				}
+
+				let lookDown: number = y + 1;
+				let visibleDown = true;
+				while (visibleDown && lookDown < height) {
+					const lookTree = forrest[lookDown][x];
+					visibleDown = lookTree < tree;
+					lookDown += 1;
+					viewDown += 1;
+				}
+
+				const viewScore = viewLeft * viewRight * viewUp * viewDown;
+				if (viewScore > maxViewScore) {
+					maxViewScore = viewScore;
+				}
+			}
+		}
+		return maxViewScore.toString();
 	}
 
 	solve() {
 		const forrest: string[][] = this.createForrest();
 		const p1Solution: string = this.findVisibleTrees(forrest);
-		const p2Solution: string = '';
+		const p2Solution: string = this.findMostScenic(forrest);;
 
 		return {
 			p1: p1Solution,
