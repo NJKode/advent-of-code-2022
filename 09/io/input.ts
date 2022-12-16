@@ -1,4 +1,4 @@
-export const input: string = `U 1
+export const input = `U 1
 L 2
 U 2
 D 2
