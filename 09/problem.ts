@@ -10,24 +10,37 @@ interface Command {
 }
 export class Problem09 extends Problem {
 
-	headPosition: Coords = [0, 0];
-	tailPositon: Coords = [0, 0];
+	chase(headPosition: Coords, tailPosition: Coords) {
+		const distance = Math.max(
+			Math.abs(headPosition[x] - tailPosition[x]),
+			Math.abs(headPosition[y] - tailPosition[y])
+		);
 
-	chase() {
-		if (this.headPosition[x] - this.tailPositon[x] > 0) {
-			this.tailPositon[x] += 1;
-		} else if (this.headPosition[x] - this.tailPositon[x] < 0)  {
-			this.tailPositon[x] -= 1;
+		if (distance <= 1) {
+			return tailPosition;
 		}
 
-		if (this.headPosition[y] - this.tailPositon[y] > 0) {
-			this.tailPositon[y] += 1;
-		} else if (this.headPosition[y] - this.tailPositon[y] < 0)  {
-			this.tailPositon[y] -= 1;
+		if (headPosition[x] - tailPosition[x] > 0) {
+			tailPosition[x] += 1;
+		} else if (headPosition[x] - tailPosition[x] < 0)  {
+			tailPosition[x] -= 1;
 		}
+
+		if (headPosition[y] - tailPosition[y] > 0) {
+			tailPosition[y] += 1;
+		} else if (headPosition[y] - tailPosition[y] < 0)  {
+			tailPosition[y] -= 1;
+		}
+		return tailPosition;
 	}
 
-	simulate() {
+	simulate(numKnots = 1) {
+		const headPosition: Coords = [0, 0];
+		const knotPositions: Coords[] = [];
+
+		for (let k = 0; k < numKnots; k += 1) {
+			knotPositions.push([0, 0]);
+		}
 		const tailHistory = new Set();
 
 		const commandStrings = input.split('\n');
@@ -44,30 +57,27 @@ export class Problem09 extends Problem {
 			for(let s = 0; s < command.steps; s += 1) {
 				switch(command.direction) {
 				case 'L':
-					this.headPosition[x] -= 1;
+					headPosition[x] -= 1;
 					break;
 				case 'R':
-					this.headPosition[x] += 1;
+					headPosition[x] += 1;
 					break;
 				case 'U':
-					this.headPosition[y] += 1;
+					headPosition[y] += 1;
 					break;
 				case 'D':
-					this.headPosition[y] -= 1;
+					headPosition[y] -= 1;
 					break;
 				default:
 					break;
 				}
 
-				const distance = Math.max(
-					Math.abs(this.headPosition[x] - this.tailPositon[x]),
-					Math.abs(this.headPosition[y] - this.tailPositon[y])
-				);
-
-				if (distance > 1) {
-					this.chase();
+				for (let k = 0; k < numKnots; k += 1) {
+					const head: Coords = k === 0 ? headPosition : knotPositions[k - 1];
+					knotPositions[k] = this.chase(head, knotPositions[k]);
 				}
-				const positionKey = `${this.tailPositon[x]},${this.tailPositon[y]}`;
+				const tailPosition = knotPositions[numKnots - 1];
+				const positionKey = `${tailPosition[x]},${tailPosition[y]}`;
 				tailHistory.add(positionKey);
 			}
 		});
@@ -76,8 +86,8 @@ export class Problem09 extends Problem {
 	}
 
 	solve() {
-		const p1Solution = this.simulate();
-		const p2Solution = '';
+		const p1Solution = this.simulate(1); // 6081
+		const p2Solution = this.simulate(9);
 
 		return {
 			p1: p1Solution,
