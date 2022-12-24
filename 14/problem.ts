@@ -84,7 +84,6 @@ export class Problem14 extends Problem {
 					this.map[`${sand.x},${sand.y}`] = 'o';
 					sandCount += 1;
 				}
-				// console.log(sand);
 			}
 		}
 		return sandCount;
@@ -140,8 +139,8 @@ export class Problem14 extends Problem {
 		const p2Solution: string = blockedSand.toString();
 
 		return {
-			p1: p1Solution,
-			p2: p2Solution
+			p1: p1Solution, // 901
+			p2: p2Solution // 24589
 		};
 	}
 }
